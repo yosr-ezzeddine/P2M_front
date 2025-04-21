@@ -1,0 +1,17 @@
+<nav class="navbar">
+    <div class="logo">
+        <img src="logo.png" alt="SentinelCloud Logo" />
+    </div>
+
+    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+    <ul class="nav-links">
+        <li><a routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a></li>
+        <li><a routerLink="/about" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">About</a></li>
+        <li><a routerLink="/services" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Services</a></li>
+        <li><a routerLink="/pricing" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Pricing</a></li>
+    </ul>
+    <div class="nav-buttons">
+        <button class="btn demo">Get a Demo</button>
+        <button class="btn sign-in">Sign in</button>
+    </div>
+</nav>

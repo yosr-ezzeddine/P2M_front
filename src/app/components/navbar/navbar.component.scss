@@ -1,0 +1,123 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background: #02021f;
+    color: white;
+    width: 100%;
+    box-sizing: border-box;
+    backdrop-filter: blur(20px);
+}
+
+.logo img {
+    width: 120px;
+    /* Fixed size for consistency */
+}
+
+/* Desktop Navigation */
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 20px;
+}
+
+.nav-links li a {
+    text-decoration: none;
+    color: white;
+    transition: 0.3s;
+}
+
+.nav-links li a:hover {
+    color: #8be4f0;
+}
+a.active {
+    font-weight: bold;
+    font-size:15px;
+     color: rgb(99, 233, 233);
+    /* Couleur principale du texte (cyan dans cet exemple) */
+     text-shadow:
+        0 0 4px rgb(99, 233, 233),
+        /* Lumière de faible intensité */
+        0 0 8px rgb(99, 233, 233),
+       
+       
+}
+.nav-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.btn {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.demo {
+    background: #782cfc;
+    color: white;
+}
+
+.demo:hover {
+    background: #955df5;
+}
+
+.sign-in {
+    background: #d95dd9;
+    color: white;
+}
+
+.sign-in:hover {
+    background: #f975bd;
+}
+
+/* 🔹 Mobile Responsive */
+.menu-toggle {
+    display: none;
+    font-size: 24px;
+    background: none;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+/* 📱 Mobile View */
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        background: rgba(2, 2, 31, 0.95);
+        text-align: center;
+        padding: 10px 0;
+    }
+
+    .nav-links.active {
+        display: flex;
+    }
+
+    .nav-links li {
+        padding: 10px 0;
+    }
+
+    .menu-toggle {
+        display: block;
+    }
+
+    .nav-buttons {
+        display: none;
+    }
+}

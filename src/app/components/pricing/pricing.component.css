@@ -1,0 +1,76 @@
+.pricing {
+    
+    background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+    color: white;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background: #0c0a24;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+}
+
+.toggle-switch {
+    margin: 20px;
+}
+
+.toggle-switch button {
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+}
+
+.pricing-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 50px;
+}
+
+.plan {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    width: 250px;
+}
+
+.popular {
+    border: 2px solid white;
+}
+
+.upgrade-btn {
+    background: #6a5acd;
+    color: white;
+    border: none;
+    padding: 10px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+footer {
+    padding: 20px;
+    background: #0c0a24;
+}
+
+.contact-sale {
+    background: transparent;
+    border: 1px solid white;
+    padding: 10px;
+    cursor: pointer;
+}
