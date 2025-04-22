@@ -7,8 +7,12 @@ html,
     /* Empêche le défilement */
 }
 
-body {
+
+html,body {
     background-color: #00001f;
+    width: 100%;
+    height: 100%;
+    padding:0;
 }
 
 .SplineBackground {
@@ -17,6 +21,7 @@ body {
     height: 100vh;
     overflow: hidden;
 }
+
 
 spline-viewer {
     position: absolute;
@@ -28,6 +33,7 @@ spline-viewer {
     /* Spline en arrière-plan */
 }
 
+
 .floatingClouds {
     position: absolute;
     top: 15px;
@@ -35,9 +41,92 @@ spline-viewer {
     width: 100%;
     height: 100%;
     z-index: 1;
+    transform: translate(0 , 5%);
 }
+
 app-animatedbutton {
     position: absolute;
-    transform: translate(-80%, -85%);
+    z-index: 5500;
+    
+}
+.homeCore {
+    position: relative;
+    background-color: #00001f;
+    transform: translateY(-3.7%);
     z-index: 5000;
+    width: 100%;
+}
+
+.contact-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(to right, #5f00ba, #000d4f);
+    border-radius: 16px;
+    padding: 40px;
+    max-width: 900px;
+    margin: 40px auto;
+    color: white;
+    overflow: hidden;
+}
+
+.contact-content {
+    flex: 1;
+    padding-right: 20px;
+}
+
+.contact-content h2 {
+    font-size: 2rem;
+    font-family: 'Georgia', serif;
+    margin-bottom: 16px;
+}
+
+.contact-content p {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 24px;
+    color: #d1d5db;
+}
+
+.contact-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: white;
+    color: #111827;
+    border-radius: 8px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.contact-button:hover {
+    background-color: #e5e7eb;
+}
+
+.contact-image {
+    flex-shrink: 0;
+    width: 280px;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.contact-image img {
+    width: 100%;
+    display: block;
+    border-radius: 12px;
+}
+@media (max-width: 768px) {
+    .contact-section {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .contact-content {
+        padding: 0;
+        margin-bottom: 20px;
+    }
+
+    .contact-image {
+        width: 100%;
+    }
 }

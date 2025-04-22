@@ -4,9 +4,9 @@ import { PricingComponent } from './components/pricing/pricing.component';
 import { NotfoundComponent } from './components/notfound/notfound.component';
 
 export const routes: Routes = [
+    { path: '', component: HomeComponent },  // Default route
     {path:"home", component:HomeComponent},
     {path:"pricing", component:PricingComponent},
     { path: '**', component: NotfoundComponent },
     {path:"", redirectTo: 'home', pathMatch:'full'},
-
 ];

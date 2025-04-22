@@ -17,15 +17,14 @@
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
-              "zone.js"
+              "zone.js",
+              "src/polyfills.ts"
             ],
             "tsConfig": "tsconfig.app.json",
-            "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
-            ],
+              "assets": [
+                "src/favicon.ico",
+                "src/assets"
+              ],
             "styles": [
               "src/styles.css"
             ],
@@ -75,14 +74,14 @@
           "options": {
             "polyfills": [
               "zone.js",
-              "zone.js/testing"
+              "zone.js/testing",
+              "src/polyfills.ts"
             ],
             "tsConfig": "tsconfig.spec.json",
             "assets": [
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
+              
+                "src/favicon.ico",
+                "src/assets"
             ],
             "styles": [
               "src/styles.css"
