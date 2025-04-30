@@ -1,0 +1,159 @@
+
+body,
+html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.sign-in {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url("../../.././assets/images/gradient-background.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow: hidden;
+}
+  
+
+.login-form {
+    max-width: 420px;
+    width: 90%;
+    padding: 40px;
+    background: rgba(253, 253, 253, 0.747);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 1.5s ease-out;
+}
+
+.form-heading {
+    text-align: center;
+    color: rgb(20, 6, 50);
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 25px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.input-group {
+    position: relative;
+    margin-bottom: 20px;
+    padding-right: 20px;
+
+}
+
+.input-group .label {
+    position: absolute;
+    top: -10px;
+    left: 12px;
+    font-size: 15px;
+    color: #040432;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    opacity: 0.7;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 15px 20px;
+    margin-top: 12px;
+    font-size: 1rem;
+    color: #333;
+    background-color: #f5f5f5;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.input-group input:focus {
+    border-color: #7449b4;
+    box-shadow: 0 0 10px rgba(146, 104, 219, 0.4);
+}
+
+.input-group input:focus+.label {
+    top: -20px;
+    font-size: 11px;
+    color: #7d6cda;
+    opacity: 1;
+}
+
+.forgot-password {
+    text-align: right;
+    margin-bottom: 20px;
+}
+
+.forgot-password a {
+    font-size: 14px;
+    color: #4c29ac;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.forgot-password a:hover {
+    color: rgb(133, 43, 149);
+}
+
+.submit {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 20px;
+    background-color: #6a5acd;
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    
+}
+
+.submit:hover {
+    background-color: #ac5acd;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(159, 59, 206, 0.811);
+}
+
+.signup-link {
+    text-align: center;
+    font-size: 14px;
+    color: #333;
+}
+
+.signup-link a {
+    color: #4c29ac;
+   
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+    cursor: pointer;
+}
+
+.signup-link a:hover {
+    color: rgb(133, 43, 149);
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@media (max-width: 480px) {
+    .login-form {
+        padding: 30px;
+        width: 90%;
+    }
+}

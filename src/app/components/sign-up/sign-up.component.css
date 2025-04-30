@@ -1,0 +1,216 @@
+body,
+html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.sign-up {
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-image: url("../../.././assets/images/gradient-background.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow: hidden;
+}
+
+.signup-form {
+    max-width: 500px;
+    width: 90%;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    padding: 40px;
+    background: rgba(253, 253, 253, 0.747);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 1.5s ease-out;
+}
+
+.form-heading {
+    text-align: center;
+    color: rgb(20, 6, 50);
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 25px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.input-group {
+    position: relative;
+    margin-bottom: 20px;
+    padding-right: 35px;
+}
+
+.input-group .label {
+    position: absolute;
+    top: -20px;
+    left: 12px;
+    font-size: 15px;
+    color: #040432;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    opacity: 0.7;
+
+}
+
+.input-group input {
+    width: 100%;
+    margin-top: 10px;
+    padding: 15px 20px;
+    font-size: 1rem;
+    color: #333;
+    background-color: #f5f5f5;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.input-group input:focus {
+    border-color: #7449b4;
+    box-shadow: 0 0 10px rgba(146, 104, 219, 0.4);
+}
+
+.input-group input:focus+.label {
+    top: -20px;
+    font-size: 11px;
+    color: #7d6cda;
+    opacity: 1;
+}
+
+/* Style for radio buttons */
+.input-group label {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+    cursor: pointer;
+    color: #333;
+    transition: all 0.3s ease;
+}
+
+.input-group input[type="radio"] {
+    width: auto;
+    margin-right: 10px;
+    accent-color: #6a5acd;
+}
+
+.input-group label:hover {
+    color: #4c29ac;
+}
+
+.pricing-link {
+    text-align: center;
+    margin: 15px 0;
+}
+
+.pricing-link a {
+    font-size: 14px;
+    color: #4c29ac;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    font-weight: 600;
+}
+
+.pricing-link a:hover {
+    color: rgb(133, 43, 149);
+    text-decoration: underline;
+}
+.password-strength {
+    margin-top: 5px;
+    font-size: 0.9rem;
+}
+
+.password-strength span {
+    font-weight: bold;
+}
+
+.password-strength .weak {
+    color: red;
+}
+
+.password-strength .medium {
+    color: orange;
+}
+
+.password-strength .strong {
+    color: green;
+}
+
+.error-message {
+    color: red;
+    font-size: 0.8rem;
+    margin-top: 3px;
+}
+
+.password-errors {
+    margin-top: 5px;
+}
+.submit {
+    width: 100%;
+    padding: 15px;
+    background-color: #6a5acd;
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+}
+
+.submit:hover {
+    background-color: #ac5acd;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(159, 59, 206, 0.811);
+}
+
+.submit:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+
+/* Optional validation error styling */
+.input-group .error-message {
+    color: #e74c3c;
+    font-size: 12px;
+    margin-top: 5px;
+    display: none;
+}
+
+.input-group input.ng-invalid.ng-touched+.label+.error-message {
+    display: block;
+}
+
+.input-group input.ng-invalid.ng-touched {
+    border-color: #e74c3c;
+}
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@media (max-width: 480px) {
+    .login-form {
+        padding: 30px;
+        width: 90%;
+    }
+
+    .form-heading {
+        font-size: 1.5rem;
+    }
+}

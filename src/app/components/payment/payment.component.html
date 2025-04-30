@@ -1,0 +1,120 @@
+<div class="payment-container">
+    <div class="payment-card">
+        <div class="payment-header">
+            <h2>Secure Payment</h2>
+            <div class="secure-badge">
+                <i class="fas fa-lock"></i>
+                <span>Secure Transaction</span>
+            </div>
+        </div>
+
+        <div class="payment-body">
+            <!-- Plan Summary -->
+            <div class="plan-summary">
+                <h2>Payment Summary</h2>
+            
+                <div class="summary-row">
+                    <span class="summary-label">Selected Plan: </span>
+                    <span class="summary-value">{{ getPlanName() }}</span>
+                </div>
+            
+                <div class="summary-row">
+                    <span class="summary-label">Billing Cycle: </span>
+                    <span class="summary-value">{{ formData.frequency === 'monthly' ? 'Monthly' : 'Annual' }}</span>
+                </div>
+            
+                <div class="summary-row">
+                    <span class="summary-label">Amount Due: </span>
+                    <span class="summary-value amount">${{ getPlanPrice() }}</span>
+                </div>
+            
+                <div class="summary-row" *ngIf="formData.frequency === 'yearly'">
+                    <span class="summary-label discount">You save ${{ getYearlyDiscount() }} annually</span>
+                </div>
+            </div>
+
+            <!-- Payment Methods -->
+            <div class="payment-methods">
+                <h3>Méthode de paiement</h3>
+
+                <div class="method-tabs">
+                    <button (click)="selectMethod('card')" [class.active]="selectedMethod === 'card'">
+                        <i class="far fa-credit-card"></i> Carte
+                    </button>
+                    <button (click)="selectMethod('paypal')" [class.active]="selectedMethod === 'paypal'">
+                        <i class="fab fa-paypal"></i> PayPal
+                    </button>
+                </div>
+
+                <!-- Card Payment Form -->
+                <div class="card-form" *ngIf="selectedMethod === 'card'">
+                    <div class="input-group">
+                        <label>Numéro de carte</label>
+                        <div class="card-input">
+                            <input type="text" [(ngModel)]="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19"
+                                (input)="formatCardNumber()">
+                            <div class="card-icons">
+                                <img src="assets/images/visa.png" alt="Visa" *ngIf="cardType === 'visa'">
+                                <img src="assets/images/mastercard.png" alt="Mastercard"
+                                    *ngIf="cardType === 'mastercard'">
+                                <img src="assets/images/amex.png" alt="Amex" *ngIf="cardType === 'amex'">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="input-group">
+                            <label>Date d'expiration</label>
+                            <input type="text" [(ngModel)]="cardExpiry" placeholder="MM/AA" maxlength="5"
+                                (input)="formatExpiry()">
+                        </div>
+                        <div class="input-group">
+                            <label>CVV</label>
+                            <div class="cvv-input">
+                                <input type="text" [(ngModel)]="cardCvv" placeholder="•••" maxlength="4">
+                                <i class="fas fa-question-circle" tooltip="3 chiffres au dos de votre carte"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Nom sur la carte</label>
+                        <input type="text" [(ngModel)]="cardName" placeholder="Comme indiqué sur la carte">
+                    </div>
+                </div>
+
+                <!-- PayPal Button -->
+                <div class="paypal-button" *ngIf="selectedMethod === 'paypal'">
+                    <button (click)="processPaypal()">
+                        <img src="assets/images/paypal-button.png" alt="Payer avec PayPal">
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="payment-footer">
+            <button class="back-button"  (click)="goBack()" >
+                <i class="fas fa-arrow-left"></i> Retour
+            </button>
+            <button class="pay-button" (click)="processPayment()" [disabled]="!isPaymentValid()">
+                Payer {{ getPlanPrice() }} € <i class="fas fa-lock"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Payment Security Info -->
+    <div class="security-info">
+        <div class="security-item">
+            <i class="fas fa-shield-alt"></i>
+            <span>Paiement 100% sécurisé</span>
+        </div>
+        <div class="security-item">
+            <i class="fas fa-undo"></i>
+            <span>Annulation à tout moment</span>
+        </div>
+        <div class="security-item">
+            <i class="fas fa-headset"></i>
+            <span>Support 24/7</span>
+        </div>
+    </div>
+</div>

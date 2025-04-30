@@ -1,7 +1,7 @@
 <div class="pricing">
     <app-navbar></app-navbar>
     <main>
-        <h2>Pricing</h2>
+        <h1>Pricing</h1>
         <p>Delivering a cutting-edge, secure, and intuitive document management solution.</p>
         <div class="toggle-switch">
             <button id="monthly" class="active">Monthly</button>
@@ -9,44 +9,208 @@
         </div>
         <section class="pricing-container">
             <div class="plan personal">
+                <div class="plan-top-bar" id="one"></div>
                 <h3>Personal</h3>
                 <p>Perfect for side projects</p>
-                <h4>$35<span>/month</span></h4>
-                <ul>
-                    <li>✔ 50GB Storage</li>
-                    <li>✔ 7-day free trial</li>
-                    <li>✖ Smart analytics</li>
-                </ul>
-                <button class="upgrade-btn">Upgrade</button>
+                <div class="alignleft">
+                    <div class="price">
+                        <span class="amount" data-monthly="35" data-yearly="28">$35</span>
+                        <span class="duration">/month</span>
+                    </div>
+                    <ul>
+                        <li>✔ 50GB Storage</li>
+                        <li>✔ 7-day free trial</li>
+                        <li>✖ Smart analytics</li>
+                    </ul>
+                </div>
+                <button class="upgrade-btn" id="upone" (click)="navigateToPayment('personal')">Upgrade</button>
             </div>
-            <div class="plan startup popular">
+            <div class="plan startup popular" id="SecondOne">
+                <div class="plan-top-bar" id="two">
+                    <h3 class="textpop">Popular</h3>
+                </div>
                 <h3>Startup</h3>
                 <p>Perfect for small teams</p>
-                <h4>$150<span>/month</span></h4>
-                <ul>
-                    <li>✔ Up to 50 users</li>
-                    <li>✔ Collaboration features</li>
-                    <li>✔ Smart analytics</li>
-                    <li>✔ 30-day free trial</li>
-                </ul>
-                <button class="upgrade-btn">Upgrade</button>
+
+                <div class="alignleft">
+                    <div class="price">
+                        <span class="amount" data-monthly="150" data-yearly="130">$150</span>
+                        <span class="duration">/month</span>
+                    </div>
+                    <ul>
+                        <li>✔ Up to 50 users</li>
+                        <li>✔ Collaboration features</li>
+                        <li>✔ Smart analytics</li>
+                        <li>✔ 30-day free trial</li>
+                    </ul>
+                </div>
+                <button class="upgrade-btn" id="uptwo" (click)="navigateToPayment('startup')">Upgrade</button>
             </div>
-            <div class="plan organization">
-                <h3>Organization</h3>
-                <p>Perfect for organizations</p>
-                <h4>$300<span>/month</span></h4>
-                <ul>
-                    <li>✔ Unlimited users</li>
-                    <li>✔ Collaboration features</li>
-                    <li>✔ Smart analytics</li>
-                    <li>✔ 30-day free trial</li>
-                </ul>
-                <button class="upgrade-btn">Upgrade</button>
+            <div class="plan entreprise">
+                <div class="plan-top-bar" id="three"></div>
+                <h3>Entreprise</h3>
+                <p>Perfect for Entreprises</p>
+                <div class="alignleft">
+                    <div class="price">
+                        <span class="amount" data-monthly="300" data-yearly="250">$300</span>
+                        <span class="duration">/month</span>
+                    </div>
+                    <ul>
+                        <li>✔ Unlimited users</li>
+                        <li>✔ Collaboration features</li>
+                        <li>✔ Smart analytics</li>
+                        <li>✔ 30-day free trial</li>
+                    </ul>
+                </div>
+                <button class="upgrade-btn" id="upthree" (click)="navigateToPayment('enterprise')">Upgrade</button>
             </div>
         </section>
+
+        <div class="compare-plans">
+            <h1 class="pricing-header">Compare plans</h1>
+
+            <div class="pricing-table">
+                <!-- FEATURES COLUMN -->
+                <div class="feature-column">
+                    <div class="section-title">Included in all plans</div>
+
+                    <div class="feature-row">
+                        <div class="feature-name">Storage</div>
+                    </div>
+
+                    <div class="feature-row">
+                        <div class="feature-name">Maximum users</div>
+                    </div>
+
+                    <div class="feature-row">
+                        <div class="feature-name">External collaborators</div>
+                    </div>
+
+                    <div class="feature-row">
+                        <div class="feature-name">Secure file sharing</div>
+                    </div>
+
+                    <div class="feature-row">
+                        <div class="feature-name">Activity logs</div>
+                    </div>
+
+                    <div class="feature-row">
+                        <div class="feature-name">User permission controls</div>
+                    </div>
+
+                    <div class="section-title">Security & compliance</div>
+
+                    <div class="feature-row">
+                        <div class="feature-name">Multi-Factor Authentication(MFA)</div>
+                    </div>
+
+                    <div class="feature-row">
+                        <div class="feature-name">Client-side File encryption</div>
+                    </div>
+
+                    <div class="feature-row">
+                        <div class="feature-name">Granular access control</div>
+                    </div>
+                </div>
+
+                <div class="plan-columns">
+                    <!-- PERSONAL PLAN -->
+                    <div class="plan-column">
+                        <h2 class="plan-title">PERSONAL</h2>
+                        <button class="upgrade-btn personal-btn"
+                            (click)="navigateToPayment('personal')">Upgrade</button>
+
+                        <!-- Values for Personal plan -->
+                        <div class="feature-value">50 GB</div>
+                        <div class="feature-value">1</div>
+                        <div class="feature-value">5</div>
+                        <div class="feature-value">
+                            <div class="checkmark"></div>
+                        </div>
+                        <div class="feature-value">
+                            <div class="checkmark"></div>
+                        </div>
+                        <div class="feature-value">
+                            <div class="text-small">for external collaborators</div>
+                        </div>
+
+                        <!-- Security features for Personal plan -->
+                        <div class="feature-value">
+                            <div class="checkmark SecComp"></div>
+                        </div>
+                        <div class="feature-value">
+                            <div class="checkmark"></div>
+                        </div>
+                        <div class="feature-value"></div>
+                    </div>
+
+                    <!-- STARTUP PLAN -->
+                    <div class="plan-column">
+                        <h2 class="plan-title">STARTUP</h2>
+                        <button class="upgrade-btn startup-btn" (click)="navigateToPayment('startup')">Upgrade</button>
+
+                        <!-- Values for Startup plan -->
+                        <div class="feature-value">2 TB</div>
+                        <div class="feature-value">50</div>
+                        <div class="feature-value">50</div>
+                        <div class="feature-value">
+                            <div class="checkmark white"></div>
+                        </div>
+                        <div class="feature-value">
+                            <div class="checkmark white"></div>
+                        </div>
+                        <div class="feature-value">
+                            <div class="checkmark white"></div>
+                        </div>
+
+                        <!-- Security features for Startup plan -->
+                        <div class="feature-value">
+                            <div class="checkmark white SecComp"></div>
+                        </div>
+                        <div class="feature-value">
+                            <div class="checkmark white"></div>
+                        </div>
+                        <div class="feature-value"></div>
+                    </div>
+
+                    <!-- ENTREPRISE PLAN -->
+                    <div class="plan-column">
+                        <h2 class="plan-title">ENTREPRISE</h2>
+                        <button class="upgrade-btn entreprise-btn"
+                            (click)="navigateToPayment('enterprise')">Upgrade</button>
+
+                        <!-- Values for entreprise plan -->
+                        <div class="feature-value">Unlimited</div>
+                        <div class="feature-value">Unlimited</div>
+                        <div class="feature-value">Unlimited</div>
+                        <div class="feature-value">
+                            <div class="checkmark"></div>
+                        </div>
+                        <div class="feature-value">
+                            <div class="checkmark"></div>
+                        </div>
+                        <div class="feature-value">
+                            <div class="checkmark"></div>
+                        </div>
+
+                        <!-- Security features for entreprise plan -->
+                        <div class="feature-value">
+                            <div class="checkmark SecComp"></div>
+                        </div>
+                        <div class="feature-value">
+                            <div class="checkmark"></div>
+                        </div>
+                        <div class="feature-value">
+                            <div class="checkmark"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
+
     <footer>
-        <button class="contact-sale">Contact Sale</button>
+        <button class="contact-sale"><img src="assets/images/mail.png" alt="mail icon" class="mailIcon"> Contact
+            Sale</button>
     </footer>
-    
 </div>

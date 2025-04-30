@@ -52,8 +52,8 @@
     background-size: cover;
 }
 
-.creative-footer-3d .instagram {
-    background-image: url('https://cdn-icons-png.flaticon.com/512/2111/2111463.png');
+.creative-footer-3d .linkedin {
+    background-image: url('https://th.bing.com/th/id/OIP.pv_d346d90OkR_buglE6jgHaHa?rs=1&pid=ImgDetMain');
     background-size: cover;
 }
 
@@ -75,11 +75,18 @@
     border-radius: 50%;
     animation: floating 5s infinite ease-in-out;
 }
-
-
+.newsreader {
+    font-family: "DM Serif Text", serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: italic;
+    font-size: 2.5vh;
+    color: rgb(235, 224, 239);
+    margin-left: 2vh;
+    letter-spacing: 0.05vhx;
+}
 /* Floating Animation */
 @keyframes floating {
-
     0%,
     100% {
         transform: translateX(-50%) translateY(0);
@@ -89,7 +96,6 @@
         transform: translateX(-50%) translateY(-20px);
     }
 }
-
 /* Footer Copyright */
 .footer-copyright {
     background: var(--secondary-color);

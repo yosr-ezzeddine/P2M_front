@@ -19,7 +19,7 @@
     position: relative;
     width: 220px;
     height: 80px;
-    transform:  translate(650px, -200px);
+    /*transform:  translate(650px, -200px);*/
 }
 
 .bg {
