@@ -1,6 +1,27 @@
+
+body,
+html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.MFA {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    position: fixed;
+    justify-content: center;
+    align-items: center;
+    background-image: url("../../.././assets/images/gradient-background.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow: hidden;
+}
 .otp-Form {
-    width: 230px;
-    height: 300px;
+    width: 400px;
+    height: 330px;
     background-color: rgb(255, 255, 255);
     display: flex;
     flex-direction: column;
@@ -11,15 +32,18 @@
     position: relative;
     box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.082);
     border-radius: 15px;
+    animation: fadeIn 1.5s ease-out;
+    
 }
 
 .mainHeading {
-    font-size: 1.1em;
-    color: rgb(15, 15, 15);
+    font-size: 2em;
+    color: rgb(20, 6, 50);
     font-weight: 700;
 }
+
 .otpSubheading {
-    font-size: 0.7em;
+    font-size: 1em;
     color: black;
     line-height: 17px;
     text-align: center;
@@ -36,7 +60,7 @@
 
 .otp-input {
     background-color: rgb(228, 228, 228);
-    width: 30px;
+    width: 250px;
     height: 30px;
     text-align: center;
     border: none;
@@ -54,8 +78,8 @@
 }
 
 .verifyButton {
-    width: 100%;
-    height: 30px;
+    width: 40%;
+    height: 40px;
     border: none;
     background-color: rgb(127, 129, 255);
     color: white;
@@ -69,24 +93,8 @@
     background-color: rgb(144, 145, 255);
     transition-duration: .2s;
 }
-
-.exitBtn {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.171);
-    background-color: rgb(255, 255, 255);
-    border-radius: 50%;
-    width: 25px;
-    height: 25px;
-    border: none;
-    color: black;
-    font-size: 1.1em;
-    cursor: pointer;
-}
-
 .resendNote {
-    font-size: 0.7em;
+    font-size: 0.9em;
     color: black;
     width: 100%;
     display: flex;
@@ -103,4 +111,26 @@
     cursor: pointer;
     font-size: 1.1em;
     font-weight: 700;
+}
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@media (max-width: 480px) {
+    .otp-Form {
+        padding: 30px;
+        width: 90%;
+    }
+
+    .mainHeading {
+        font-size: 1.5rem;
+    }
 }

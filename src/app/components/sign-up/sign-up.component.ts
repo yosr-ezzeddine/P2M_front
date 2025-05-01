@@ -106,12 +106,16 @@ export class SignUpComponent {
       return;
     }
 
-    this.router.navigate(['/payment'], {
+    this.router.navigate(['/confirmationCode'], {
       state: {
         formData: this.formData,
         plan: this.formData.plan
       }
     });
   }
+
+  
 }
+
+
 

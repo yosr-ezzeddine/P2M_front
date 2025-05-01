@@ -5,15 +5,20 @@ import { NotfoundComponent } from './components/notfound/notfound.component';
 import { SignInComponent } from './components/sign-in/sign-in.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { PaymentComponent } from './components/payment/payment.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { confirmSignUp } from 'aws-amplify/auth';
+import { MFACodeComponent } from './components/mfacode/mfacode.component';
 
 
 export const routes: Routes = [
     { path: '', component: HomeComponent },  // Default route
-    {path:"home", component:HomeComponent},
+    { path: "home", component: HomeComponent },
     { path: "pricing", component: PricingComponent },
     { path: 'sign-in', component: SignInComponent },
     { path: 'sign-up', component: SignUpComponent },
+    { path: 'confirmationCode', component: MFACodeComponent },
+    { path: 'dashboard', component: DashboardComponent },
     { path: 'payment', component: PaymentComponent },
     { path: '**', component: NotfoundComponent },
-    {path:"", redirectTo: 'home', pathMatch:'full'},
+    { path: "", redirectTo: 'home', pathMatch: 'full' },
 ];

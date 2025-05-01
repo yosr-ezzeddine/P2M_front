@@ -105,9 +105,14 @@
         placeholder="Enter your enterprise name" />
     </div>
      
-    <button class="submit" type="submit">
+
+    <!--  <button class="submit" type="submit"
+      [disabled]="(passwordErrors.length > 0 || passwordMismatch || !signupForm.form.valid)">
       proceed to payment  
-    </button>
+    </button> -->
+    
+     <!-- dans cette étape de dévéloppement on vas supposer  qu'on a fait le payement et on va passer  au MFA -->
+    <button class="submit" type="submit">Sign Up</button>
     
     <!-- Ajoutez ce CSS -->
     <style>
