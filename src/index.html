@@ -19,7 +19,19 @@
     <link
       href="https://fonts.googleapis.com/css2?family=Cookie&family=DM+Serif+Text:ital@0;1&family=Mogra&family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Quattrocento:wght@400;700&display=swap"
       rel="stylesheet">
+ 
 
+    <script>
+        var global = global || window ; //// Définit l'objet global pour Node.js et le navigateur
+          // - Dans Node.js, `global` est l'objet racine (comme `window` dans le navigateur)
+          // - Dans le navigateur, `window` est utilisé comme fallback
+          var buffer = buffer || [];    //  Provides a fallback if Buffer is unavailable (browsers).
+
+        var process = process || {
+            env : { DEBUG : undefined },
+            version: []   };   //Defines a process object, which is a core Node.js global containing environment variables and runtime info.
+            // Prevents process is not defined errors in browsers.     
+    </script>  
 </head>
 <body>
   <app-root></app-root>

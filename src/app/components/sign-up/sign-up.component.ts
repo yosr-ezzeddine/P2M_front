@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router'; // Importations nécessaires
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { CognitoService } from '../../cognito.service';
 @Component({
   selector: 'app-sign-up',
   
@@ -28,7 +29,7 @@ export class SignUpComponent {
     enterpriseName: ''
   };
   formSubmitted = false;
-  constructor(private router: Router) {
+  constructor(private router: Router, private congnitoService: CognitoService) {
     const navigation = this.router.getCurrentNavigation();
     const state = navigation?.extras.state as { formData: any, preserveFormData?: boolean };
 
