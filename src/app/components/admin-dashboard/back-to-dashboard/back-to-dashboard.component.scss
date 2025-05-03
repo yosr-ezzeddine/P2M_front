@@ -1,0 +1,19 @@
+.back-to-dashboard-btn {
+    background-color: #290023; /* Blue background */
+    color: white; /* White text */
+    font-size: 16px; /* Font size */
+    padding: 10px 20px; /* Padding around the text */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+    
+    &:hover {
+      background-color: #9e00b3; /* Darker blue on hover */
+    }
+    
+    &:focus {
+      outline: none; /* Remove focus outline */
+    }
+  }
+  
