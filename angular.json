@@ -21,7 +21,8 @@
               "src/polyfills.ts"
             ],
             "tsConfig": "tsconfig.app.json",
-              "assets": [
+
+            "assets": [
                 "src/favicon.ico",
                 "src/assets"
               ],
@@ -30,6 +31,7 @@
             ],
             "scripts": []
           },
+          
           "configurations": {
             "production": {
               "budgets": [

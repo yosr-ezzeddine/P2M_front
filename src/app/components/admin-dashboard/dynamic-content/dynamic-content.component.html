@@ -1,0 +1,7 @@
+ <!-- Zone du contenu dynamique -->
+ <div  *ngIf="selectedAction" class="dynamic-content ">
+    <app-employee-form *ngIf="selectedAction === 'employees'"></app-employee-form>
+    <app-department-manager *ngIf="selectedAction === 'departments'"></app-department-manager>
+    <app-roles-permissions-manager *ngIf="selectedAction === 'roles'"></app-roles-permissions-manager>
+    <app-file-manager *ngIf="selectedAction === 'files'"></app-file-manager>
+  </div>

@@ -1,0 +1,37 @@
+<div class="logo">
+  <img src="logo.png" alt="SentinelCloud Logo" />
+</div>
+<div class="dashboard-container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="company-info">
+        <img src="assets/logo.png" alt="Company Logo" class="company-logo" />
+        <p class="company-name">Company Name</p>
+      </div>
+      <ul class="sidebar-menu">
+        <li>My plan</li>
+        <li>My Drive</li>
+        <li>History</li>
+        <li>Notifications</li>
+        <li>Customize your portal</li>
+        <li>Settings</li>
+        <li>Help center</li>
+      </ul>
+    </div>
+  
+    <!-- Main Content -->
+    <div class="main-content">
+      <div class="actions-panel">
+        <h2>ACTIONS</h2>
+        <div class="action-buttons">
+          <button (click)="selectAction('employees')"> <i data-lucide="users"></i>&nbsp;Manage Employees</button>
+          <button (click)="selectAction('departments')"> <i data-lucide="building-2"></i>&nbsp;Manage Departments</button>
+          <button (click)="selectAction('roles')"><i data-lucide="settings"></i>&nbsp;Manage Roles/Permissions</button>
+          <button (click)="selectAction('files')"><i data-lucide="file"></i>&nbsp;Manage Files</button>
+        </div>
+      </div>
+    
+      <app-dynamic-content  [selectedAction]="selectedAction"></app-dynamic-content>
+    </div>
+  </div>
+  
