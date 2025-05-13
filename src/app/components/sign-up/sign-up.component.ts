@@ -1,121 +1,135 @@
 import { Component } from '@angular/core';
-import { Router, RouterModule } from '@angular/router'; // Importations nécessaires
+import { Router } from '@angular/router';
+import { CognitoService } from '../../cognito.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { CognitoService } from '../../cognito.service';
+import { RouterModule } from '@angular/router';
+
 @Component({
   selector: 'app-sign-up',
-  
-  imports: [
-    CommonModule,
-    FormsModule,
-    RouterModule 
-  ],
+  standalone: true,
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './sign-up.component.html',
-  styleUrl: './sign-up.component.css'
+  styleUrls: ['./sign-up.component.css']
 })
 export class SignUpComponent {
-  formData: any = {
+  formData = {
     fullName: '',
     email: '',
     password: '',
-    confirmpassword: '',
+    confirmPassword: '',
     phone: '',
     address1: '',
     address2: '',
-    plan: '',
-    frequency:'',
+    plan: 'personal' as 'personal' | 'startup' | 'enterprise',
+    frequency: 'monthly' as 'monthly' | 'yearly',
     startupName: '',
     enterpriseName: ''
   };
-  formSubmitted = false;
-  constructor(private router: Router, private congnitoService: CognitoService) {
-    const navigation = this.router.getCurrentNavigation();
-    const state = navigation?.extras.state as { formData: any, preserveFormData?: boolean };
 
-    if (state?.preserveFormData && state.formData) {
-      this.formData = { ...this.formData, ...state.formData };
-    }
-  }
+  formSubmitted = false;
+  passwordStrength = '';
+  passwordErrors: string[] = [];
+  passwordMismatch = false;
+  isLoading = false;
+  errorMessage = '';
+
+  constructor(
+    private router: Router,
+    private cognitoService: CognitoService
+  ) { }
+
   onPlanChange() {
-    // Optionally reset conditional fields
     if (this.formData.plan === 'startup') {
       this.formData.enterpriseName = '';
     } else if (this.formData.plan === 'enterprise') {
       this.formData.startupName = '';
-    } else {
-      this.formData.startupName = '';
-      this.formData.enterpriseName = '';
     }
   }
-  passwordStrength: string = '';
-  passwordErrors: string[] = [];
-  passwordMismatch: boolean = false;
 
   checkPasswordStrength() {
     const password = this.formData.password;
     this.passwordErrors = [];
-
-    // Réinitialiser la force
     this.passwordStrength = '';
 
     if (!password) return;
 
-    // Vérifications de sécurité
-    const hasMinLength = password.length >= 8;
-    const hasUpperCase = /[A-Z]/.test(password);
-    const hasLowerCase = /[a-z]/.test(password);
-    const hasNumbers = /\d/.test(password);
-    const hasSpecialChars = /[!@#$%^&*(),.?":{}|<>]/.test(password);
+    const requirements = [
+      { test: password.length >= 8, message: "At least 8 characters" },
+      { test: /[A-Z]/.test(password), message: "One uppercase letter" },
+      { test: /[a-z]/.test(password), message: "One lowercase letter" },
+      { test: /\d/.test(password), message: "One number" },
+      { test: /[^A-Za-z0-9]/.test(password), message: "One special character" }
+    ];
 
-    // Messages d'erreur
-    if (!hasMinLength) this.passwordErrors.push("Password must be at least 8 characters long");
-    if (!hasUpperCase) this.passwordErrors.push("Password must contain at least one uppercase letter");
-    if (!hasLowerCase) this.passwordErrors.push("Password must contain at least one lowercase letter");
-    if (!hasNumbers) this.passwordErrors.push("Password must contain at least one number");
-    if (!hasSpecialChars) this.passwordErrors.push("Password must contain at least one special character");
+    this.passwordErrors = requirements.filter(req => !req.test).map(req => req.message);
+    const strengthPoints = requirements.filter(req => req.test).length;
 
-    // Déterminer la force
-    const strengthPoints = [
-      hasMinLength,
-      hasUpperCase,
-      hasLowerCase,
-      hasNumbers,
-      hasSpecialChars
-    ].filter(Boolean).length;
-
-    if (strengthPoints <= 2) {
-      this.passwordStrength = 'Weak';
-    } else if (strengthPoints <= 4) {
-      this.passwordStrength = 'Medium';
-    } else {
-      this.passwordStrength = 'Strong';
-    }
+    this.passwordStrength =
+      strengthPoints <= 2 ? 'Weak' :
+        strengthPoints <= 4 ? 'Medium' : 'Strong';
   }
 
   checkPasswordMatch() {
-    this.passwordMismatch = this.formData.password !== this.formData.confirmpassword;
+    this.passwordMismatch = this.formData.password !== this.formData.confirmPassword;
   }
-  onSubmit() {
+
+  async onSubmit() {
     this.formSubmitted = true;
     this.checkPasswordStrength();
     this.checkPasswordMatch();
 
-    if (this.passwordErrors.length > 0 || this.passwordMismatch) {
-      // Afficher un message d'erreur global
+    if (this.passwordErrors.length > 0 || this.passwordMismatch ||
+      !this.formData.email || !this.formData.fullName) {
       return;
     }
 
-    this.router.navigate(['/confirmationCode'], {
-      state: {
-        formData: this.formData,
-        plan: this.formData.plan
-      }
-    });
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    try {
+      const user = {
+        email: this.formData.email,
+        password: this.formData.password,
+        name: this.formData.fullName,
+        phoneNumber: this.formData.phone,
+        // Include custom attributes
+        customAttributes: {
+          address: `${this.formData.address1} ${this.formData.address2}`.trim(),
+          plan: this.formData.plan,
+          billing_frequency: this.formData.frequency,
+          ...(this.formData.plan === 'startup' && { startup_name: this.formData.startupName }),
+          ...(this.formData.plan === 'enterprise' && { enterprise_name: this.formData.enterpriseName })
+        }
+      };
+
+      await this.cognitoService.signUp(user).toPromise();
+
+      this.router.navigate(['/confirmationCode'], {
+        state: {
+          email: this.formData.email,
+          formData: this.formData
+        }
+      });
+    } catch (error: any) {
+      this.errorMessage = this.getFriendlyErrorMessage(error);
+      console.error('Sign up error:', error);
+    } finally {
+      this.isLoading = false;
+    }
   }
 
-  
+  private getFriendlyErrorMessage(error: any): string {
+    const message = error.message || '';
+    if (message.includes('User already exists')) {
+      return 'An account with this email already exists';
+    }
+    if (message.includes('Password did not conform')) {
+      return 'Password must contain: 8+ chars, uppercase, lowercase, number, and special character';
+    }
+    if (message.includes('Invalid phone number format')) {
+      return 'Please enter a valid phone number (e.g., 50187997)';
+    }
+    return 'Registration failed. Please try again.';
+  }
 }
-
-
-

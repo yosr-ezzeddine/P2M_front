@@ -1,8 +1,8 @@
 export const environment = {
     production: true,
     cognito: {
-        userPoolId: 'eu-north-1_2Wjz6ASTd',
-        userPoolClientId: 'ikga7mv9g2ftru6pf6tub6hrc',
+        userPoolId: 'eu-north-1_dh4XTuPyg',
+        userPoolClientId: '3i778f4bu77n73p5js484ec7o9',
         region: 'eu-north-1'   
     },
     appName: 'Sentinel Cloud'                 // For TOTP setup

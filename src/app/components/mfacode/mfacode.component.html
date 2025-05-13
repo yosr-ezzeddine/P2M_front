@@ -1,13 +1,31 @@
-
 <div class="MFA">
-  <form class="otp-Form">
+  <form class="otp-Form" (ngSubmit)="onSubmit()">
     <span class="mainHeading">Enter OTP</span>
     <p class="otpSubheading">We have sent a verification code to your mobile number</p>
-    <div class="inputContainer">
-        <input required="required" type="text" class="otp-input" id="otp-input1">
-    </div>
-    <button class="verifyButton" type="submit">Verify</button>
 
-    <p class="resendNote">Didn't receive the code? <button class="resendBtn">Resend Code</button></p>
+
+    <!-- Error Message -->
+    <div *ngIf="errorMessage" class="errorMessage">
+      {{ errorMessage }}
+    </div>
+
+
+    <div class="inputContainer">
+      <input required type="text" class="otp-input" id="otp-input1" [(ngModel)]="otpCode" name="otpCode" maxlength="6"
+        [class.input-error]="errorMessage" (input)="errorMessage = ''">
+    </div>
+
+
+    <button class="verifyButton" type="submit" [disabled]="isLoading">
+      {{ isLoading ? 'Verifying...' : 'Verify' }}
+    </button>
+
+
+    <p class="resendNote">
+      Didn't receive the code?
+      <button class="resendBtn" (click)="resendCode()" [disabled]="!resendEnabled">
+        {{ resendEnabled ? 'Resend Code' : `Resend (${resendCountdown}s)` }}
+      </button>
+    </p>
   </form>
 </div>

@@ -2,18 +2,28 @@
   <form class="signup-form" (ngSubmit)="onSubmit()" #signupForm="ngForm">
     <div class="form-heading">Create an Account</div>
 
+    
+    <!-- Full Name -->
     <div class="input-group">
       <label class="label" for="fullName">Full Name</label>
       <input type="text" id="fullName" name="fullName" [(ngModel)]="formData.fullName" required
         placeholder="Enter your full name" />
+      <div *ngIf="formSubmitted && !formData.fullName" class="error-message">
+        Full name is required
+      </div>
     </div>
 
+    <!-- Email -->
     <div class="input-group">
       <label class="label" for="email">Email</label>
       <input type="email" id="email" name="email" [(ngModel)]="formData.email" required
         placeholder="Enter your email" />
+      <div *ngIf="formSubmitted && !formData.email" class="error-message">
+        Email is required
+      </div>
     </div>
 
+    <!-- Password -->
     <div class="input-group">
       <label class="label" for="password">Password</label>
       <input type="password" id="password" name="password" [(ngModel)]="formData.password" required
@@ -31,24 +41,32 @@
       </div>
     </div>
 
+    <!-- Confirm Password -->
     <div class="input-group">
       <label class="label" for="confirmpassword">Confirm Password</label>
-      <input type="password" id="confirmpassword" name="confirmpassword" [(ngModel)]="formData.confirmpassword" required
+      <input type="password" id="confirmpassword" name="confirmpassword" [(ngModel)]="formData.confirmPassword" required
         placeholder="Confirm your password" (input)="checkPasswordMatch()" />
       <div *ngIf="passwordMismatch" class="error-message">Passwords do not match</div>
     </div>
-    
 
+    <!-- Phone Number -->
     <div class="input-group">
       <label class="label" for="phone">Phone Number</label>
       <input type="tel" id="phone" name="phone" [(ngModel)]="formData.phone" required
         placeholder="Enter your phone number" />
+      <div *ngIf="formSubmitted && !formData.phone" class="error-message">
+        Phone number is required
+      </div>
     </div>
 
+    <!-- Address -->
     <div class="input-group">
       <label class="label" for="address1">Address Line 1</label>
       <input type="text" id="address1" name="address1" [(ngModel)]="formData.address1" required
         placeholder="Enter your address" />
+      <div *ngIf="formSubmitted && !formData.address1" class="error-message">
+        Address is required
+      </div>
     </div>
 
     <div class="input-group">
@@ -57,71 +75,72 @@
         placeholder="Apartment, suite, etc. (optional)" />
     </div>
 
+    <!-- Plan Selection -->
     <div class="form-heading" style="font-size: 1.2rem; margin-top: 20px;">Choose a Plan</div>
 
     <div class="input-group">
       <label>
-        <input type="radio" name="plan" [(ngModel)]="formData.plan" value="personal" [(ngModel)]="formData.plan" required (change)="onPlanChange()"
-          required />
+        <input type="radio" name="plan" [(ngModel)]="formData.plan" value="personal" required
+          (change)="onPlanChange()" />
         Personal Plan
       </label>
       <label>
-        <input type="radio" name="plan" [(ngModel)]="formData.plan" value="startup" [(ngModel)]="formData.plan" required (change)="onPlanChange()" />
+        <input type="radio" name="plan" [(ngModel)]="formData.plan" value="startup" (change)="onPlanChange()" />
         Startup Plan
       </label>
       <label>
-        <input type="radio" name="plan" [(ngModel)]="formData.plan" value="enterprise" [(ngModel)]="formData.plan" required (change)="onPlanChange()" />
+        <input type="radio" name="plan" [(ngModel)]="formData.plan" value="enterprise" (change)="onPlanChange()" />
         Enterprise Plan
       </label>
     </div>
+
+    <!-- Billing Frequency -->
     <div class="form-heading" style="font-size: 1.2rem; margin-top: 20px;">Billing frequency</div>
 
     <div class="input-group">
       <label>
-        <input type="radio" name="frequency" [(ngModel)]="formData.frequency" value="monthly" [(ngModel)]="formData.frequency" required />
+        <input type="radio" name="frequency" [(ngModel)]="formData.frequency" value="monthly" required />
         Monthly
       </label>
-
       <label>
-        <input type="radio" name="frequency" [(ngModel)]="formData.frequency" value="yearly" [(ngModel)]="formData.frequency" required />
+        <input type="radio" name="frequency" [(ngModel)]="formData.frequency" value="yearly" />
         Yearly
       </label>
     </div>
 
-
-    <div class="pricing-link">
-      <a href="/pricing" target="_blank">View plan details and pricing</a>
-    </div>
-
+    <!-- Conditional Fields -->
     <div class="input-group" *ngIf="formData.plan === 'startup'">
       <label class="label" for="startupName">Startup Name</label>
       <input type="text" id="startupName" name="startupName" [(ngModel)]="formData.startupName" required
         placeholder="Enter your startup name" />
+      <div *ngIf="formSubmitted && !formData.startupName" class="error-message">
+        Startup name is required
+      </div>
     </div>
 
     <div class="input-group" *ngIf="formData.plan === 'enterprise'">
       <label class="label" for="enterpriseName">Enterprise Name</label>
       <input type="text" id="enterpriseName" name="enterpriseName" [(ngModel)]="formData.enterpriseName" required
         placeholder="Enter your enterprise name" />
+      <div *ngIf="formSubmitted && !formData.enterpriseName" class="error-message">
+        Enterprise name is required
+      </div>
     </div>
-     
 
-    <!--  <button class="submit" type="submit"
-      [disabled]="(passwordErrors.length > 0 || passwordMismatch || !signupForm.form.valid)">
-      proceed to payment  
-    </button> -->
-    
-     <!-- dans cette étape de dévéloppement on vas supposer  qu'on a fait le payement et on va passer  au MFA -->
-    <button class="submit" type="submit">Sign Up</button>
-    
-    <!-- Ajoutez ce CSS -->
-    <style>
-      .form-error {
-        color: red;
-        margin-bottom: 15px;
-        padding: 10px;
-        border-radius: 4px;
-      }
-    </style>
+    <!-- Submit Button -->
+    <button class="submit" type="submit"
+      [disabled]="isLoading || passwordErrors.length > 0 || passwordMismatch || !signupForm.form.valid">
+      <span *ngIf="!isLoading">Sign Up</span>
+      <span *ngIf="isLoading">Creating account...</span>
+    </button>
+
+    <div class="login-link">
+      Already have an account? <a routerLink="/sign-in">Sign in</a>
+    </div>
+    <!-- Error Message -->
+    <div *ngIf="errorMessage" class="form-error">
+      {{ errorMessage }}
+    </div>
   </form>
+ 
 </div>

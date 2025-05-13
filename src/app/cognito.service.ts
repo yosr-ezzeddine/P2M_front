@@ -1,7 +1,7 @@
 import { environment } from '../environments/environment';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, from, Observable, of } from 'rxjs';
-import { map, catchError, tap, switchMap } from 'rxjs/operators'; 
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { Amplify } from 'aws-amplify';
 import {
   signUp,
@@ -17,116 +17,90 @@ import {
   type SignUpOutput
 } from 'aws-amplify/auth';
 import { Router } from '@angular/router';
-import { SHA256 } from 'crypto-js';
-import { enc } from 'crypto-js';
-import { jwtDecode } from 'jwt-decode';
 import { authenticator } from 'otplib';
-
 
 export interface IUser {
   email: string;
   password: string;
-  code: string;
+  code?: string;
   name?: string;
+  phoneNumber?: string;
 }
 
-export interface ISharedUser {
-  email: string;
-  password: string;
-}
-
-interface DecodedToken {
-  sub: string;
-  email?: string;
-  [key: string]: any;
-}
+export type MFAType = 'SMS' | 'TOTP';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CognitoService {
   private cognitoUser: AuthUser | null = null;
-  private sharedUser: ISharedUser | null = null;
-  private authenticatedSubject: BehaviorSubject<boolean>;
-  public isAuthenticated$: Observable<boolean>;
-  private mfaSetupRequiredSubject = new BehaviorSubject<boolean>(false);
-  public mfaSetupRequired$ = this.mfaSetupRequiredSubject.asObservable();
+  private authenticatedSubject = new BehaviorSubject<boolean>(false);
+  public isAuthenticated$ = this.authenticatedSubject.asObservable();
+  public mfaSetupRequired$ = new BehaviorSubject<boolean>(false);
 
   constructor(private router: Router) {
     this.configureAmplify();
-    this.authenticatedSubject = new BehaviorSubject<boolean>(false);
-    this.isAuthenticated$ = this.authenticatedSubject.asObservable();
-    this.checkAuthState().subscribe();
+    this.initializeAuthState();
   }
 
   private configureAmplify(): void {
-    const authConfig = {
-      Cognito: {
-        region: environment.cognito.region,
-        userPoolId: environment.cognito.userPoolId,
-        userPoolWebClientId: environment.cognito.userPoolClientId,
-        authenticationFlowType: 'USER_PASSWORD_AUTH',
-        mfa: {
-          status: 'optional',
-          totpEnabled: true,
-          smsEnabled: false
-        },
-        passwordFormat: {
-          minLength: 12,
-          requireLowercase: true,
-          requireUppercase: true,
-          requireNumbers: true,
-          requireSpecialCharacters: true
+    Amplify.configure({
+      Auth: {
+        Cognito: {
+          userPoolId: environment.cognito.userPoolId,
+          userPoolClientId: environment.cognito.userPoolClientId,
+          loginWith: { email: true },
+          mfa: {
+            smsEnabled: true,  // Correct property name
+            totpEnabled: true  // Correct property name
+          }
         }
       }
-    };
+    });
   }
-
-  private checkAuthState(): Observable<boolean> {
-    return from(getCurrentUser()).pipe(
+  private initializeAuthState(): void {
+    from(getCurrentUser()).pipe(
       tap(user => {
         this.cognitoUser = user;
         this.authenticatedSubject.next(true);
       }),
-      map(() => true),
       catchError(() => {
         this.authenticatedSubject.next(false);
-        return of(false);
+        return of(null);
       })
-    );
+    ).subscribe();
   }
 
-  public signUp(user: IUser): Observable<SignUpOutput> {
-    if (!user.name) {
-      user.name = user.email;
-    }
-
+  public signUp(user: {
+    email: string,
+    password: string,
+    name: string,
+    phoneNumber?: string,
+    customAttributes?: Record<string, string>
+  }): Observable<SignUpOutput> {
     return from(signUp({
-      username: user.name,
+      username: user.email,
       password: user.password,
       options: {
         userAttributes: {
-          email: user.email
+          email: user.email,
+          name: user.name,
+          phone_number: user.phoneNumber ? `+216${user.phoneNumber}` : undefined,
+          ...(user.customAttributes || {})
         },
         autoSignIn: false
       }
     })).pipe(
-      catchError(error => {
-        console.error('SignUp Error:', error);
-        throw this.handleAuthError(error);
-      })
+      catchError(error => this.handleAuthError(error))
     );
   }
 
   public confirmSignUp(user: IUser): Observable<any> {
     return from(confirmSignUp({
-      username: user.name || user.email,
-      confirmationCode: user.code
+      username: user.email,
+      confirmationCode: user.code!
     })).pipe(
-      catchError(error => {
-        console.error('ConfirmSignUp Error:', error);
-        throw this.handleAuthError(error);
-      })
+      catchError(error => this.handleAuthError(error))
     );
   }
 
@@ -135,97 +109,65 @@ export class CognitoService {
       username: user.email,
       password: user.password
     })).pipe(
-      switchMap(async (response: SignInOutput) => {
+      switchMap(async (response) => {
         this.cognitoUser = await getCurrentUser();
-        this.handleSignInNextSteps(response);
+
+        switch (response.nextStep?.signInStep) {
+          case 'CONFIRM_SIGN_IN_WITH_SMS_CODE':
+            this.router.navigate(['/confirm-mfa'], {
+              state: {
+                type: 'SMS',
+                destination: response.nextStep.codeDeliveryDetails?.destination
+              }
+            });
+            break;
+
+          case 'CONFIRM_SIGN_IN_WITH_TOTP_CODE':
+            this.router.navigate(['/confirm-mfa'], {
+              state: { type: 'TOTP' }
+            });
+            break;
+
+          case 'DONE':
+            this.authenticatedSubject.next(true);
+            this.router.navigate(['/home']);
+            break;
+        }
         return response;
       }),
-      catchError(error => {
-        console.error('SignIn Error:', error);
-        throw this.handleAuthError(error);
-      })
+      catchError(error => this.handleAuthError(error))
     );
   }
 
-  private handleSignInNextSteps(signInResponse: SignInOutput): void {
-    switch (signInResponse.nextStep?.signInStep) {
-      case 'CONFIRM_SIGN_IN_WITH_TOTP_CODE':
-        this.router.navigate(['/otp']);
-        break;
-      case 'CONTINUE_SIGN_IN_WITH_MFA_SELECTION':
-        break;
-      case 'DONE':
-        this.authenticatedSubject.next(true);
-        this.router.navigate(['/home']);
-        break;
-      default:
-        console.warn('Unhandled signIn step:', signInResponse.nextStep?.signInStep);
-    }
-  }
-
-  public confirmSignInWithMFA(otpCode: string): Observable<any> {
-    return from(confirmSignIn({
-      challengeResponse: otpCode
-    })).pipe(
-      tap(() => {
+  public confirmMFACode(code: string, type: MFAType): Observable<any> {
+    return from(confirmSignIn({ challengeResponse: code })).pipe(
+      tap(async () => {
+        this.cognitoUser = await getCurrentUser();
         this.authenticatedSubject.next(true);
         this.router.navigate(['/home']);
       }),
-      catchError(error => {
-        console.error('ConfirmSignIn Error:', error);
-        throw this.handleAuthError(error);
-      })
+      catchError(error => this.handleAuthError(error))
     );
   }
 
-  public signOut(): Observable<void> {
-    return from(signOut({ global: true })).pipe(
-      tap(() => {
-        this.cognitoUser = null;
-        this.authenticatedSubject.next(false);
-        this.router.navigate(['/login']);
-      }),
-      catchError(error => {
-        console.error('SignOut Error:', error);
-        throw this.handleAuthError(error);
-      })
-    );
-  }
 
-  public getCurrentUser(): Observable<AuthUser | null> {
-    if (this.cognitoUser) {
-      return of(this.cognitoUser);
-    }
-    return from(getCurrentUser()).pipe(
-      tap(user => this.cognitoUser = user),
-      catchError(() => of(null))
-    );
-  }
-
-  public getIdToken(): Observable<string | null> {
-    return from(fetchAuthSession()).pipe(
-      map(session => session.tokens?.idToken?.toString() || null),
-      catchError(() => of(null))
-    );
-  }
-
-  public isAuthenticated(): Observable<boolean> {
-    if (this.authenticatedSubject.value) {
-      return of(true);
-    }
-    return this.getCurrentUser().pipe(
-      map(user => !!user),
-      tap(authenticated => this.authenticatedSubject.next(authenticated))
-    );
+  public resendSMSCode(): Promise<void> {
+    return signIn({
+      username: this.cognitoUser?.username || '',
+      password: '' // Password not needed for resend
+    }).then(response => {
+      if (response.nextStep?.signInStep !== 'CONFIRM_SIGN_IN_WITH_SMS_CODE') {
+        throw new Error('Failed to trigger SMS resend');
+      }
+    });
   }
 
   public async setupTOTP(): Promise<string> {
     try {
       const { sharedSecret } = await setUpTOTP();
       const user = await getCurrentUser();
-      const username = user.username || user.userId || 'unknown';
       return authenticator.keyuri(
-        username,
+        user.username || user.userId || 'user',
         environment.appName,
         sharedSecret
       );
@@ -236,79 +178,51 @@ export class CognitoService {
   }
 
   public verifyTOTPSetup(totpCode: string): Observable<void> {
-    return this.confirmSignInWithMFA(totpCode).pipe(
-      tap(() => this.mfaSetupRequiredSubject.next(false))
+    return this.confirmMFACode(totpCode, 'TOTP').pipe(
+      tap(() => this.mfaSetupRequired$.next(false))
     );
   }
 
-  public generateSecurePassword(idToken: string): string {
-    try {
-      const decodedToken = jwtDecode<DecodedToken>(idToken);
-      if (!decodedToken.sub) throw new Error('Invalid token: missing sub claim');
+  public signOut(): Observable<void> {
+    return from(signOut()).pipe(
+      tap(() => {
+        this.cognitoUser = null;
+        this.authenticatedSubject.next(false);
+        this.router.navigate(['/login']);
+      }),
+      catchError(error => this.handleAuthError(error))
+    );
+  }
 
-      const hashedSub = SHA256(`${decodedToken.sub}:${environment.cognito.userPoolId}`)
-        .toString(enc.Hex)
-        .slice(0, 16);
+  public getCurrentUser(): Observable<AuthUser | null> {
+    return this.cognitoUser
+      ? of(this.cognitoUser)
+      : from(getCurrentUser()).pipe(
+        tap(user => this.cognitoUser = user),
+        catchError(() => of(null))
+      );
+  }
 
-      const array = new Uint8Array(8);
-      crypto.getRandomValues(array);
-      const randomPart = Array.from(array).map(b => b.toString(16).padStart(2, '0')).join('');
-      let password = `${hashedSub}${randomPart}`;
+  public fetchAuthSession(): Observable<any> {
+    return from(fetchAuthSession()).pipe(
+      catchError(error => this.handleAuthError(error))
+    );
+  }
 
-      const requirements = [
-        { test: /[A-Z]/, generator: this.getRandomUpperCase },
-        { test: /[a-z]/, generator: this.getRandomLowerCase },
-        { test: /\d/, generator: this.getRandomNumber },
-        { test: /[^A-Za-z0-9]/, generator: this.getRandomSpecialCharacter }
-      ];
+  private handleAuthError(error: any): Observable<never> {
+    console.error('Auth Error:', error);
+    let message = 'Authentication failed';
 
-      requirements.forEach(req => {
-        if (!req.test.test(password)) password += req.generator();
-      });
-
-      while (password.length < 16) password += this.getRandomCharacter();
-      return password.slice(0, 32);
-    } catch (error) {
-      console.error('Password generation error:', error);
-      return this.generateRandomPassword();
+    if (error.message) {
+      if (error.message.includes('Incorrect username or password')) {
+        message = 'Invalid email or password';
+      } else if (error.message.includes('User not confirmed')) {
+        message = 'Please verify your email first';
+      } else {
+        message = error.message;
+      }
     }
-  }
 
-  private generateRandomPassword(): string {
-    const length = 16;
-    const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>?';
-    let password = '';
-    password += this.getRandomUpperCase();
-    password += this.getRandomLowerCase();
-    password += this.getRandomNumber();
-    password += this.getRandomSpecialCharacter();
-    for (let i = password.length; i < length; i++) {
-      password += charset.charAt(Math.floor(Math.random() * charset.length));
-    }
-    return password.split('').sort(() => 0.5 - Math.random()).join('');
-  }
-
-  private handleAuthError(error: any): Error {
-    let message = 'Authentication error';
-    if (typeof error === 'string') message = error;
-    else if (error?.message) message = error.message;
-    else if (error?.toString) message = error.toString();
-
-    if (message.includes('Incorrect username or password')) message = 'Invalid email or password';
-    else if (message.includes('User not confirmed')) message = 'Account not verified. Please check your email for verification code.';
-
-    return new Error(message);
-  }
-
-  private getRandomUpperCase(): string { return String.fromCharCode(65 + Math.floor(Math.random() * 26)); }
-  private getRandomLowerCase(): string { return String.fromCharCode(97 + Math.floor(Math.random() * 26)); }
-  private getRandomNumber(): string { return String.fromCharCode(48 + Math.floor(Math.random() * 10)); }
-  private getRandomSpecialCharacter(): string {
-    const specials = '!@#$%^&*()_+-=[]{}|;:,.<>?';
-    return specials.charAt(Math.floor(Math.random() * specials.length));
-  }
-  private getRandomCharacter(): string {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    return chars.charAt(Math.floor(Math.random() * chars.length));
+    throw new Error(message);
   }
 }

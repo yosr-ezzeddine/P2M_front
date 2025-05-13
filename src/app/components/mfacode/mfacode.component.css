@@ -1,10 +1,10 @@
-
 body,
 html {
     height: 100%;
     margin: 0;
     padding: 0;
 }
+
 
 .MFA {
     width: 100%;
@@ -19,6 +19,7 @@ html {
     background-repeat: no-repeat;
     overflow: hidden;
 }
+
 .otp-Form {
     width: 400px;
     height: 330px;
@@ -33,8 +34,9 @@ html {
     box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.082);
     border-radius: 15px;
     animation: fadeIn 1.5s ease-out;
-    
+
 }
+
 
 .mainHeading {
     font-size: 2em;
@@ -42,12 +44,14 @@ html {
     font-weight: 700;
 }
 
+
 .otpSubheading {
     font-size: 1em;
     color: black;
     line-height: 17px;
     text-align: center;
 }
+
 
 .inputContainer {
     width: 100%;
@@ -57,6 +61,7 @@ html {
     align-items: center;
     justify-content: center;
 }
+
 
 .otp-input {
     background-color: rgb(228, 228, 228);
@@ -71,11 +76,13 @@ html {
     font-weight: 600;
 }
 
+
 .otp-input:focus,
 .otp-input:valid {
     background-color: rgba(127, 129, 255, 0.199);
     transition-duration: .3s;
 }
+
 
 .verifyButton {
     width: 40%;
@@ -89,10 +96,12 @@ html {
     transition-duration: .2s;
 }
 
+
 .verifyButton:hover {
     background-color: rgb(144, 145, 255);
     transition-duration: .2s;
 }
+
 .resendNote {
     font-size: 0.9em;
     color: black;
@@ -104,6 +113,7 @@ html {
     gap: 5px;
 }
 
+
 .resendBtn {
     background-color: transparent;
     border: none;
@@ -112,11 +122,63 @@ html {
     font-size: 1.1em;
     font-weight: 700;
 }
+
+/* Error Message Styling */
+.errorMessage {
+    color: #d32f2f;
+    background-color: rgba(255, 235, 235, 0.9);
+    padding: 10px 15px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-align: center;
+    margin-bottom: 10px;
+    border-left: 3px solid #d32f2f;
+    animation: fadeIn 0.3s ease-out;
+}
+
+
+/* Input Error State */
+.input-error {
+    background-color: rgba(255, 235, 235, 0.3) !important;
+    border: 1px solid #d32f2f !important;
+}
+
+
+/* Disabled Resend Button */
+.resendBtn:disabled {
+    color: #999 !important;
+    cursor: not-allowed;
+}
+
+
+/* Loading State */
+.verifyButton[disabled] {
+    background-color: #a0a0ff !important;
+    cursor: not-allowed;
+}
+
+
+/* Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 @keyframes fadeIn {
     0% {
         opacity: 0;
         transform: scale(0.9);
     }
+
 
     100% {
         opacity: 1;
@@ -124,11 +186,13 @@ html {
     }
 }
 
+
 @media (max-width: 480px) {
     .otp-Form {
         padding: 30px;
         width: 90%;
     }
+
 
     .mainHeading {
         font-size: 1.5rem;

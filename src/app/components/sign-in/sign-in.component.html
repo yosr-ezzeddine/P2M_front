@@ -1,19 +1,42 @@
 <div class="sign-in">
-    <form class="login-form">
-        <div class="form-heading">Sign in </div>
-        <div class="input-group">
+    <form class="login-form" (ngSubmit)="onSubmit()" #signInForm="ngForm">
+        <div class="form-heading">Sign in</div>
+
+        <!-- General Error Message (Added) -->
+        <div *ngIf="errors.general" class="form-error">
+            <i class="fas fa-exclamation-circle"></i> {{ errors.general }}
+        </div>
+
+        <div class="input-group" [class.has-error]="errors.email">
             <label class="label" for="email">Email</label>
-            <input required="" placeholder="Enter your email" name="email" id="email" type="email" />
+            <input type="email" id="email" name="email" [(ngModel)]="email" required placeholder="Enter your email"
+                [class.input-error]="errors.email" />
+            <!-- Field Error (Added) -->
+            <div *ngIf="errors.email" class="field-error">
+                <i class="fas fa-info-circle"></i> {{ errors.email }}
+            </div>
         </div>
-        <div class="input-group">
+
+        <div class="input-group" [class.has-error]="errors.password">
             <label class="label" for="password">Password</label>
-            <input required="" placeholder="Enter your password" name="password" id="password" type="password" />
+            <input type="password" id="password" name="password" [(ngModel)]="password" required
+                placeholder="Enter your password" [class.input-error]="errors.password" />
+            <!-- Field Error (Added) -->
+            <div *ngIf="errors.password" class="field-error">
+                <i class="fas fa-info-circle"></i> {{ errors.password }}
+            </div>
         </div>
+
         <div class="forgot-password">
-            <a href="#">Forgot password?</a>
+            <a (click)="navigateToForgotPassword()">Forgot password?</a>
         </div>
-        <button class="submit" type="submit">Log In</button>
-        <div class="signup-link"> Don't have an account? <a href="/sign-up">Sign up</a>
+
+        <button class="submit" type="submit" [disabled]="isLoading">
+            {{ isLoading ? 'Signing in...' : 'Sign In' }}
+        </button>
+
+        <div class="signup-link">
+            Don't have an account? <a routerLink="/sign-up">Sign up</a>
         </div>
     </form>
 </div>
