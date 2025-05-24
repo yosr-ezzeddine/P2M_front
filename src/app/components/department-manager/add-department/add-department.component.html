@@ -1,3 +1,93 @@
-<p>add-department works!</p>
-
-<app-back-to-dashboard></app-back-to-dashboard>
+<app-navbar></app-navbar>
+<div class="container">
+ <app-back-to-dashboard></app-back-to-dashboard>
+ <div class="add-department-container">
+    <div class="add-department-modal">
+        <h1 class="modal-title">Add Department</h1>
+    
+        <form [formGroup]="departmentForm" (ngSubmit)="onSubmit()">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="departmentName">Department Name</label>
+                    <input type="text" id="departmentName" formControlName="name" class="form-control"
+                        placeholder="Input text">
+                    <div *ngIf="departmentForm.get('name')?.invalid && departmentForm.get('name')?.touched"
+                        class="error-message">
+                        Department name is required
+                    </div>
+                </div>
+    
+                <div class="form-group">
+                    <label for="departmentId">Id</label>
+                    <input type="text" id="departmentId" formControlName="id" class="form-control" placeholder="Input text">
+                    <div *ngIf="departmentForm.get('id')?.invalid && departmentForm.get('id')?.touched"
+                        class="error-message">
+                        Department ID is required
+                    </div>
+                </div>
+            </div>
+    
+            <div class="form-group">
+                <label for="description">Brief Description</label>
+                <textarea id="description" formControlName="description" class="form-control description-textarea"
+                    placeholder="Enter a brief description for this department" maxlength="1000"></textarea>
+                <div class="char-count">/ 1000</div>
+            </div>
+    
+            <div class="form-group">
+                <label for="departmentHead">Department Head</label>
+                <div class="select-container">
+                    <select id="departmentHead" formControlName="departmentHead" class="form-control">
+                        <option [ngValue]="null">Select Department Head</option>
+                        <option *ngFor="let manager of managers" [value]="manager.id">{{ manager.name }}</option>
+                    </select>
+                    <div class="select-arrow">
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="form-group add-manager">
+                <button type="button" class="btn-add-manager" (click)="addNewManager()">
+                    <i class="fas fa-plus"></i>
+                    <span>Assign New Manager(not listed)</span>
+                </button>
+            </div>
+    
+            <div class="form-group">
+                <label for="parentDepartment">Parent Department</label>
+                <div class="select-container">
+                    <select id="parentDepartment" formControlName="parentDepartment" class="form-control">
+                        <option [ngValue]="null">Select Parent Department</option>
+                        <option *ngFor="let dept of departments" [value]="dept.id">{{ dept.name }}</option>
+                    </select>
+                    <div class="select-arrow">
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="form-group advanced-options">
+                <h3>Advanced Options</h3>
+    
+                <div class="checkbox-group">
+                    <div class="custom-checkbox">
+                        <input type="checkbox" id="enableCollaboration" formControlName="enableCollaboration">
+                        <label for="enableCollaboration">Enable Collaboration Channels</label>
+                    </div>
+                </div>
+    
+                <div class="checkbox-group">
+                    <div class="custom-checkbox">
+                        <input type="checkbox" id="enable2FA" formControlName="enable2FA">
+                        <label for="enable2FA">Enable Two-Factor Authentication (2FA) for Department Admins</label>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="form-actions">
+                <button type="submit" class="btn-add">Add</button>
+            </div>
+        </form>
+    </div>
+</div>
